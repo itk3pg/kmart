@@ -175,7 +175,7 @@ class Barang extends CI_Controller {
 
 		//KPG validasi kode barang
 		$query = $this->barang_model->getListBarangByCode($_POST['kode']);
-		if ($query->num_rows() > 0){
+		if ($query->num_rows() > 0 && $_POST['mode']=='i'){
 			$this->output->set_status_header('400');
 			die('Kode Barang sudah ada!');
 		}
