@@ -1,0 +1,39 @@
+.question {
+	position: absolute;
+	display: inline;
+	text-align: center;
+	width: 174px;
+	height: 78px;
+	font-size: 13px;
+	line-height: 1.5em;
+	background: url('images/bubble.png') left top no-repeat;
+	padding: 10px 0 0 0;
+	margin-left: -7em;
+	margin-top: -6em;
+	opacity: 0;
+}
+
+.yes, .cancel {
+	margin-top: .5em;
+	margin-right: .5em;
+	cursor: pointer;
+	display: inline-block;
+	width: 63px;
+	height: 21px;
+	color: #fff;
+}
+
+.yes {
+	background: url('images/button_cancel.png') left top no-repeat;
+}
+
+.cancel {
+	background: url('images/button_yes.png') left top no-repeat;
+}
+
+.title {
+	font-size: 30px;
+	margin-bottom: 1.5em;
+	font-weight: bold;
+	font-style: italic;
+}
