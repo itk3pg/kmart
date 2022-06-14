@@ -492,7 +492,7 @@ class Detailpenjualanharian extends CI_Controller {
 	public function cetakdetailpenjualan(){
 		$DataTransaksiPenjualan = $this->laporan_model->RekapDetailPenjualanHarian($_GET);
 
-		$subTotalTunai = $DataTransaksiPenjualan[0]['UangTunai'] + $DataTransaksiPenjualan[0]['fkupon'] + $DataTransaksiPenjualan[0]['fvoucher'] + $DataTransaksiPenjualan[0]['fshu'] + $DataTransaksiPenjualan[0]['kartu_debit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_debit_bni'] + $DataTransaksiPenjualan[0]['kartu_debit_bri'] + $DataTransaksiPenjualan[0]['kartu_debit_bca'] + $DataTransaksiPenjualan[0]['kartu_debit_dki'] + $DataTransaksiPenjualan[0]['kartu_kredit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bni'] + $DataTransaksiPenjualan[0]['kartu_kredit_bri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bca'] + $DataTransaksiPenjualan[0]['link_aja'];
+		$subTotalTunai = $DataTransaksiPenjualan[0]['UangTunai'] + $DataTransaksiPenjualan[0]['fkupon'] + $DataTransaksiPenjualan[0]['fvoucher'] + $DataTransaksiPenjualan[0]['fshu'] + $DataTransaksiPenjualan[0]['kartu_debit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_debit_bni'] + $DataTransaksiPenjualan[0]['kartu_debit_bri'] + $DataTransaksiPenjualan[0]['kartu_debit_bca'] + $DataTransaksiPenjualan[0]['kartu_debit_dki'] + $DataTransaksiPenjualan[0]['kartu_kredit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bni'] + $DataTransaksiPenjualan[0]['kartu_kredit_bri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bca'] + $DataTransaksiPenjualan[0]['link_aja'] + $DataTransaksiPenjualan[0]['transfer'];
 
 		$subTotalKredit = $DataTransaksiPenjualan[0]['KreditAngs'] + $DataTransaksiPenjualan[0]['kredit_buku'] + $DataTransaksiPenjualan[0]['kredit_perusahaan'];
 
@@ -620,6 +620,12 @@ class Detailpenjualanharian extends CI_Controller {
 					<td width=\"150\">LINK AJA</td>
 					<td width=\"30\"> : </td>
 					<td width=\"130\" align=\"right\">".number_format($DataTransaksiPenjualan[0]['link_aja'], 2)."</td>
+				</tr>";
+		$html .= "<tr>
+					<td width=\"50\">1199</td>
+					<td width=\"150\">TRANSFER</td>
+					<td width=\"30\"> : </td>
+					<td width=\"130\" align=\"right\">".number_format($DataTransaksiPenjualan[0]['transfer'], 2)."</td>
 				</tr>";
 		$html .= "</table>";
 		$html .= "<hr/>";

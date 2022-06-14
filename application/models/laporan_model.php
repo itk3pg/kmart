@@ -933,8 +933,8 @@ class Laporan_model extends CI_Model{
 	}
 	
 	function getLaporanStockOpname($data){
-		$query = "select c.*, ((c.stok_fisik + c.revisi) - c.stok_sistem) as selisih, (c.hpp * ((c.stok_fisik + c.revisi) - c.stok_sistem)) as jumlah_selisih from (select a.barang_kode, b.nama_barang, a.stok_sistem, sum(a.stok_opname) as stok_fisik, if(a.revisi is null, 0, a.revisi) as revisi, a.hpp, GROUP_CONCAT(a.rak separator ' || ') as rak from stock_opname a left join barang b on a.barang_kode=b.kode where a.toko_kode='".$data['toko_kode']."' and a.bukti='".$data['bukti']."' group by a.barang_kode) c order by selisih";
-		
+		// $query = "select c.*, ((c.stok_fisik + c.revisi) - c.stok_sistem) as selisih, (c.hpp * ((c.stok_fisik + c.revisi) - c.stok_sistem)) as jumlah_selisih from (select a.barang_kode, b.nama_barang, a.stok_sistem, sum(a.stok_opname) as stok_fisik, if(a.revisi is null, 0, a.revisi) as revisi, a.hpp, GROUP_CONCAT(a.rak separator ' || ') as rak from stock_opname a left join barang b on a.barang_kode=b.kode where a.toko_kode='".$data['toko_kode']."' and a.bukti='".$data['bukti']."' group by a.barang_kode) c order by selisih";
+		$query = "select c.*, ((c.stok_fisik + c.revisi) - c.stok_sistem) as selisih, (c.hpp * ((c.stok_fisik + c.revisi) - c.stok_sistem)) as jumlah_selisih from (select a.barang_kode, b.nama_barang, a.stok_sistem, sum(a.stok_opname) as stok_fisik, if(a.revisi is null, 0, a.revisi) as revisi, round(a.hpp,2) hpp, GROUP_CONCAT(a.rak separator ' || ') as rak from stock_opname a left join barang b on a.barang_kode=b.kode where a.toko_kode='".$data['toko_kode']."' and a.bukti='".$data['bukti']."' group by a.barang_kode) c order by selisih";
 		$result = $this->db->query($query);
 		$resultTable = $result->result_array();
 		
