@@ -514,7 +514,7 @@ class Detailpenjualanharian extends CI_Controller {
 	public function cetakdetailpenjualan(){
 		$DataTransaksiPenjualan = $this->laporan_model->RekapDetailPenjualanHarian($_GET);
 
-		$subTotalTunai = $DataTransaksiPenjualan[0]['UangTunai'] + $DataTransaksiPenjualan[0]['fkupon'] + $DataTransaksiPenjualan[0]['fvoucher'] + $DataTransaksiPenjualan[0]['fshu'] + $DataTransaksiPenjualan[0]['kartu_debit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_debit_bni'] + $DataTransaksiPenjualan[0]['kartu_debit_bri'] + $DataTransaksiPenjualan[0]['kartu_debit_bca'] + $DataTransaksiPenjualan[0]['kartu_debit_dki'] + $DataTransaksiPenjualan[0]['kartu_kredit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bni'] + $DataTransaksiPenjualan[0]['kartu_kredit_bri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bca'] + $DataTransaksiPenjualan[0]['link_aja'];
+		$subTotalTunai = $DataTransaksiPenjualan[0]['UangTunai'] + $DataTransaksiPenjualan[0]['fkupon'] + $DataTransaksiPenjualan[0]['fvoucher'] + $DataTransaksiPenjualan[0]['fshu'] + $DataTransaksiPenjualan[0]['kartu_debit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_debit_bni'] + $DataTransaksiPenjualan[0]['kartu_debit_bri'] + $DataTransaksiPenjualan[0]['kartu_debit_bca'] + $DataTransaksiPenjualan[0]['kartu_debit_dki'] + $DataTransaksiPenjualan[0]['kartu_kredit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bni'] + $DataTransaksiPenjualan[0]['kartu_kredit_bri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bca'] + $DataTransaksiPenjualan[0]['link_aja'] + $DataTransaksiPenjualan[0]['transfer'];
 
 		$subTotalKredit = $DataTransaksiPenjualan[0]['KreditAngs'] + $DataTransaksiPenjualan[0]['kredit_buku'] + $DataTransaksiPenjualan[0]['kredit_perusahaan'];
 
