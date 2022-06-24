@@ -25,7 +25,7 @@ class Detailpenjualanharian extends CI_Controller {
 						<tr>
 							<th class='text-center' rowspan='2'>Tanggal</th>
 							<th class='text-center' rowspan='2'>Toko</th>
-							<th class='text-center' colspan='16'>Tunai</th>
+							<th class='text-center' colspan='17'>Tunai</th>
 							<th class='text-center' colspan='4'>Kredit</th>
 							<th class='text-center' rowspan='2'>Total</th>
 						</tr>
@@ -58,9 +58,9 @@ class Detailpenjualanharian extends CI_Controller {
 					<tbody>";
 		
 		foreach ($DataTransaksiPenjualan as $key => $value) {
-			$subTotal = $value['UangTunai'] + $value['fkupon'] + $value['fvoucher'] + $value['fshu'] + $value['kartu_debit_mandiri'] + $value['kartu_debit_bni'] + $value['kartu_debit_bri'] + $value['kartu_debit_bca'] + $value['kartu_debit_dki'] + $value['kartu_kredit_mandiri'] + $value['kartu_kredit_bni'] + $value['kartu_kredit_bri'] + $value['kartu_kredit_bca'] + $value['link_aja'] + $value['transfer'] + $value['KreditAngs'] + $value['kredit_buku'] + $value['kredit_perusahaan'];
+			$subTotal = $value['UangTunai'] + $value['fkupon'] + $value['fvoucher'] + $value['fshu'] + $value['kartu_debit_mandiri'] + $value['kartu_debit_bni'] + $value['kartu_debit_bri'] + $value['kartu_debit_bca'] + $value['kartu_debit_dki'] + $value['kartu_kredit_mandiri'] + $value['kartu_kredit_bni'] + $value['kartu_kredit_bri'] + $value['kartu_kredit_bca'] + $value['link_aja'] + $value['transfer_bni'] + $value['transfer_mandiri'] + $value['KreditAngs'] + $value['kredit_buku'] + $value['kredit_perusahaan'];
 
-			$subTotalTunai = $value['UangTunai'] + $value['fkupon'] + $value['fvoucher'] + $value['fshu'] + $value['kartu_debit_mandiri'] + $value['kartu_debit_bni'] + $value['kartu_debit_bri'] + $value['kartu_debit_bca'] + $value['kartu_debit_dki'] + $value['kartu_kredit_mandiri'] + $value['kartu_kredit_bni'] + $value['kartu_kredit_bri'] + $value['kartu_kredit_bca'] + $value['link_aja'] + $value['transfer'];
+			$subTotalTunai = $value['UangTunai'] + $value['fkupon'] + $value['fvoucher'] + $value['fshu'] + $value['kartu_debit_mandiri'] + $value['kartu_debit_bni'] + $value['kartu_debit_bri'] + $value['kartu_debit_bca'] + $value['kartu_debit_dki'] + $value['kartu_kredit_mandiri'] + $value['kartu_kredit_bni'] + $value['kartu_kredit_bri'] + $value['kartu_kredit_bca'] + $value['link_aja'] + $value['transfer_bni'] + $value['transfer_mandiri'];
 
 			$subTotalKredit = $value['KreditAngs'] + $value['kredit_buku'] + $value['kredit_perusahaan'];
 
@@ -514,7 +514,7 @@ class Detailpenjualanharian extends CI_Controller {
 	public function cetakdetailpenjualan(){
 		$DataTransaksiPenjualan = $this->laporan_model->RekapDetailPenjualanHarian($_GET);
 
-		$subTotalTunai = $DataTransaksiPenjualan[0]['UangTunai'] + $DataTransaksiPenjualan[0]['fkupon'] + $DataTransaksiPenjualan[0]['fvoucher'] + $DataTransaksiPenjualan[0]['fshu'] + $DataTransaksiPenjualan[0]['kartu_debit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_debit_bni'] + $DataTransaksiPenjualan[0]['kartu_debit_bri'] + $DataTransaksiPenjualan[0]['kartu_debit_bca'] + $DataTransaksiPenjualan[0]['kartu_debit_dki'] + $DataTransaksiPenjualan[0]['kartu_kredit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bni'] + $DataTransaksiPenjualan[0]['kartu_kredit_bri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bca'] + $DataTransaksiPenjualan[0]['link_aja'] + $DataTransaksiPenjualan[0]['transfer'];
+		$subTotalTunai = $DataTransaksiPenjualan[0]['UangTunai'] + $DataTransaksiPenjualan[0]['fkupon'] + $DataTransaksiPenjualan[0]['fvoucher'] + $DataTransaksiPenjualan[0]['fshu'] + $DataTransaksiPenjualan[0]['kartu_debit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_debit_bni'] + $DataTransaksiPenjualan[0]['kartu_debit_bri'] + $DataTransaksiPenjualan[0]['kartu_debit_bca'] + $DataTransaksiPenjualan[0]['kartu_debit_dki'] + $DataTransaksiPenjualan[0]['kartu_kredit_mandiri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bni'] + $DataTransaksiPenjualan[0]['kartu_kredit_bri'] + $DataTransaksiPenjualan[0]['kartu_kredit_bca'] + $DataTransaksiPenjualan[0]['link_aja'] + $DataTransaksiPenjualan[0]['transfer_bni'] + $DataTransaksiPenjualan[0]['transfer_mandiri'];
 
 		$subTotalKredit = $DataTransaksiPenjualan[0]['KreditAngs'] + $DataTransaksiPenjualan[0]['kredit_buku'] + $DataTransaksiPenjualan[0]['kredit_perusahaan'];
 
