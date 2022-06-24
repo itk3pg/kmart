@@ -828,7 +828,7 @@ class Detailpenjualanharian extends CI_Controller {
 					<td width=\"130\" align=\"right\"><strong>".number_format($GrandTotal, 2)."</strong></td>
 				</tr>";
 		$html .= "</table>";
-
+		$html .= "<table><tr><td></td></tr><tr><td></td></tr></table>";
 		$html .= "<table>";
 		$html .= "<tr>
 					<td width=\"50\"></td>
@@ -885,7 +885,7 @@ class Detailpenjualanharian extends CI_Controller {
 		// Add a page
 		$pdf->setPrintHeader(false);
 		$pdf->setPrintFooter(false);
-		$pagesize = array(150, 430);
+		$pagesize = array(150, 460);
 		$pdf->AddPage('P', $pagesize);
 		$pdf->writeHTML($html, true, false, true, false, '');
 		$pdf->Output('Bukti_Kasbank.pdf', 'I');
