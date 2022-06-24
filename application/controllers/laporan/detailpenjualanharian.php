@@ -44,7 +44,8 @@ class Detailpenjualanharian extends CI_Controller {
 							<th class='text-center'>CC BRI</th>
 							<th class='text-center'>CC BCA</th>
 							<th class='text-center'>Link Aja</th>
-							<th class='text-center'>Transfer</th>
+							<th class='text-center'>Transfer BNI</th>
+							<th class='text-center'>Transfer MANDIRI</th>
 							<th class='text-center'>Total Tunai</th>
 
 							<th class='text-center'>Angsuran</th>
@@ -80,7 +81,8 @@ class Detailpenjualanharian extends CI_Controller {
 						<td align=\"right\">".number_format($value['kartu_kredit_bri'],2)."</td>
 						<td align=\"right\">".number_format($value['kartu_kredit_bca'],2)."</td>
 						<td align=\"right\">".number_format($value['link_aja'],2)."</td>
-						<td align=\"right\">".number_format($value['transfer'],2)."</td>
+						<td align=\"right\">".number_format($value['transfer_bni'],2)."</td>
+						<td align=\"right\">".number_format($value['transfer_mandiri'],2)."</td>
 						<td align=\"right\"><strong>".number_format($subTotalTunai,2)."</strong></td>
 						<td align=\"right\">".number_format($value['KreditAngs'],2)."</td>
 						<td align=\"right\">".number_format($value['kredit_buku'],2)."</td>
@@ -145,7 +147,7 @@ class Detailpenjualanharian extends CI_Controller {
 							<th style='vertical-align: middle;' class='text-center' rowspan='2'>Pelanggan</th>
 							<th style='vertical-align: middle;' class='text-center' rowspan='2'>Kasir</th>
 							<th style='vertical-align: middle;' class='text-center' rowspan='2'>Total</th>
-							<th class='text-center' colspan='10'>Pembayaran</th>
+							<th class='text-center' colspan='13'>Pembayaran</th>
 						</tr>
 						<tr>
 							<th class='text-center'>Tunai</th>
@@ -158,6 +160,8 @@ class Detailpenjualanharian extends CI_Controller {
 							<th class='text-center'>SHU</th>
 							<th class='text-center'>Kredit Instansi</th>
 							<th class='text-center'>Voucher</th>
+							<th class='text-center'>Transfer BNI</th>
+							<th class='text-center'>Transfer MANDIRI</th>
 							<th class='text-center'>Pembulatan</th>
 						</tr>
 					</thead>
@@ -174,6 +178,8 @@ class Detailpenjualanharian extends CI_Controller {
 		$TotalSHU = 0;
 		$TotalKredit = 0;
 		$TotalVoucher = 0;
+		$TotalTransferBNI = 0;
+		$TotalTransferMANDIRI = 0;
 		$TotalPembulatan = 0;
 		
 		$TotalHarian = 0;
@@ -187,6 +193,8 @@ class Detailpenjualanharian extends CI_Controller {
 		$TotalSHUHarian = 0;
 		$TotalKreditHarian = 0;
 		$TotalVoucherHarian = 0;
+		$TotalTransferBNIHarian = 0;
+		$TotalTransferMANDIRIHarian = 0;
 		$TotalPembulatanHarian = 0;
 		
 		$fcreatedby = "";
@@ -211,6 +219,8 @@ class Detailpenjualanharian extends CI_Controller {
 							<td align=\"right\"><strong>".number_format($TotalSHUHarian,2)."</strong></td>
 							<td align=\"right\"><strong>".number_format($TotalKreditHarian,2)."</strong></td>
 							<td align=\"right\"><strong>".number_format($TotalVoucherHarian,2)."</strong></td>
+							<td align=\"right\"><strong>".number_format($TotalTransferBNIHarian,2)."</strong></td>
+							<td align=\"right\"><strong>".number_format($TotalTransferMANDIRIHarian,2)."</strong></td>
 							<td align=\"right\"><strong>".number_format($TotalPembulatanHarian,2)."</strong></td>
 						  </tr>";
 						  
@@ -225,6 +235,8 @@ class Detailpenjualanharian extends CI_Controller {
 				$TotalSHUHarian = 0;
 				$TotalKreditHarian = 0;
 				$TotalVoucherHarian = 0;
+				$TotalTransferBNIHarian = 0;
+				$TotalTransferMANDIRIHarian = 0;
 				$TotalPembulatanHarian = 0;
 				
 				$fcreatedby = $value['fcreatedby'];
@@ -247,6 +259,8 @@ class Detailpenjualanharian extends CI_Controller {
 						<td align=\"right\">".number_format($value['fshu'],2)."</td>
 						<td align=\"right\">".number_format($value['kredit'],2)."</td>
 						<td align=\"right\">".number_format($value['voucher'],2)."</td>
+						<td align=\"right\">".number_format($value['transfer_bni'],2)."</td>
+						<td align=\"right\">".number_format($value['transfer_mandiri'],2)."</td>
 						<td align=\"right\">".number_format($value['pembulatan'],2)."</td>
 					  </tr>";
 			
@@ -261,6 +275,8 @@ class Detailpenjualanharian extends CI_Controller {
 			$TotalSHU += $value['fshu'];
 			$TotalKredit += $value['kredit'];
 			$TotalVoucher += $value['voucher'];
+			$TotalTransferBNI += $value['transfer_bni'];
+			$TotalTransferMANDIRI += $value['transfer_mandiri'];
 			$TotalPembulatan += $value['pembulatan'];
 			
 			$TotalHarian += $value['fbill_amount'];
@@ -274,6 +290,8 @@ class Detailpenjualanharian extends CI_Controller {
 			$TotalSHUHarian += $value['fshu'];
 			$TotalKreditHarian += $value['kredit'];
 			$TotalVoucherHarian += $value['voucher'];
+			$TotalTransferBNIHarian += $value['transfer_bni'];
+			$TotalTransferMANDIRIHarian += $value['transfer_mandiri'];
 			$TotalPembulatanHarian += $value['pembulatan'];
 		}
 		
@@ -290,6 +308,8 @@ class Detailpenjualanharian extends CI_Controller {
 					<td align=\"right\"><strong>".number_format($TotalSHUHarian,2)."</strong></td>
 					<td align=\"right\"><strong>".number_format($TotalKreditHarian,2)."</strong></td>
 					<td align=\"right\"><strong>".number_format($TotalVoucherHarian,2)."</strong></td>
+					<td align=\"right\"><strong>".number_format($TotalTransferBNIHarian,2)."</strong></td>
+					<td align=\"right\"><strong>".number_format($TotalTransferMANDIRIHarian,2)."</strong></td>
 					<td align=\"right\"><strong>".number_format($TotalPembulatanHarian,2)."</strong></td>
 				  </tr>";
 		$html .= "<tr>
@@ -305,6 +325,8 @@ class Detailpenjualanharian extends CI_Controller {
 					<td align=\"right\"><strong>".number_format($TotalSHU,2)."</strong></td>
 					<td align=\"right\"><strong>".number_format($TotalKredit,2)."</strong></td>
 					<td align=\"right\"><strong>".number_format($TotalVoucher,2)."</strong></td>
+					<td align=\"right\"><strong>".number_format($TotalTransferBNI,2)."</strong></td>
+					<td align=\"right\"><strong>".number_format($TotalTransferMANDIRI,2)."</strong></td>
 					<td align=\"right\"><strong>".number_format($TotalPembulatan,2)."</strong></td>
 				  </tr>";
 		$html .= "</tbody></table>";
@@ -513,6 +535,11 @@ class Detailpenjualanharian extends CI_Controller {
 		$html .= "<tr>
 					<td align=\"center\">HARIAN KASIR</td>
 				  </tr>";
+		if ($_GET['kasir_kode'] != ''){
+			$html .= "<tr>
+					<td align=\"center\">".$DataTransaksiPenjualan[0]['kasir']."</td>
+					</tr>";
+		}
 		$html .= "<tr>
 					<td align=\"center\">".$DataTransaksiPenjualan[0]['nama_toko']."</td>
 				  </tr>";
@@ -622,11 +649,17 @@ class Detailpenjualanharian extends CI_Controller {
 					<td width=\"130\" align=\"right\">".number_format($DataTransaksiPenjualan[0]['link_aja'], 2)."</td>
 				</tr>";
 		$html .= "<tr>
-					<td width=\"50\">1199</td>
-					<td width=\"150\">TRANSFER</td>
-					<td width=\"30\"> : </td>
-					<td width=\"130\" align=\"right\">".number_format($DataTransaksiPenjualan[0]['transfer'], 2)."</td>
-				</tr>";
+				<td width=\"50\">1199</td>
+				<td width=\"150\">TRANSFER BNI</td>
+				<td width=\"30\"> : </td>
+				<td width=\"130\" align=\"right\">".number_format($DataTransaksiPenjualan[0]['transfer_bni'], 2)."</td>
+			</tr>";
+		$html .= "<tr>
+				<td width=\"50\">1199</td>
+				<td width=\"150\">TRANSFER MANDIRI</td>
+				<td width=\"30\"> : </td>
+				<td width=\"130\" align=\"right\">".number_format($DataTransaksiPenjualan[0]['transfer_mandiri'], 2)."</td>
+			</tr>";
 		$html .= "</table>";
 		$html .= "<hr/>";
 		$html .= "<table>";
