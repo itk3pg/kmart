@@ -131,4 +131,11 @@ class User_model extends CI_Model{
 		$DataKasir = $this->db->query($query);
 		return $DataKasir->result_array();
 	}
+
+	function getKasirByCode($code){
+		$query = "select a.username, a.nama from `user` a where a.group_kode='GRU0001' and a.username = '".$code."'";
+
+		$DataKasir = $this->db->query($query);
+		return $DataKasir->get()->row();
+	}
 }

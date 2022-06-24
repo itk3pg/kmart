@@ -385,6 +385,49 @@ class Laporan_model extends CI_Model{
 			}
 			 //k3pg-ppn
 			$query = "select a.fcode, date(a.fdate) as fdate, a.fcustkey, a.fcustname, a.fcodecashier as fcreatedby, c.nama as nama_kasir, sum(a.fbill_amount + a.fvat + a.fpembulatan + a.fpos_tax_count + a.fpoint) as fbill_amount, sum(a.fcash-a.fcash_change) as fpayment, sum(if(a.fbank_name='MANDIRI', a.fdebet, 0)) as kartu_debit_mandiri, sum(if(a.fbank_name='BRI', a.fdebet, 0)) as kartu_debit_bri, sum(if(a.fbank_name='BNI', a.fdebet, 0)) as kartu_debit_bni, sum(a.fkredit) as kartu_kredit, sum(if(a.ftype=2, (a.fbill_amount + a.fvat), 0)) as kredit, sum(a.fshu) as fshu, sum(a.fkupon) as fkupon, sum(a.fpotga) as kredit_anggota, sum(a.fvoucher) as voucher, sum(a.fpembulatan) as pembulatan from rst_fc_trans_header a left join `user` c on a.fcodecashier=c.username where (date(a.fdate) between '".$data['tanggal_awal']."' and '".$data['tanggal_akhir']."') and a.fbill_amount is not null and a.flokasi='".$data['toko_kode']."' and a.fstatuskey='1' ".$whereKasir." group by a.fcode, a.fdate, a.fcustkey, a.fcodecashier, a.fcustname order by a.fdate, a.fcodecashier, a.fcode";
+			
+			$query = "
+			select
+				a.fcode,
+				date(a.fdate) as fdate,
+				a.fcustkey,
+				a.fcustname,
+				a.fcodecashier as fcreatedby,
+				c.nama as nama_kasir,
+				sum(a.fbill_amount + a.fvat + a.fpembulatan + a.fpos_tax_count + a.fpoint) as fbill_amount,
+				sum(a.fcash-a.fcash_change) as fpayment,
+				sum(if(a.fbank_name = 'MANDIRI', a.fdebet, 0)) as kartu_debit_mandiri,
+				sum(if(a.fbank_name = 'BRI', a.fdebet, 0)) as kartu_debit_bri,
+				sum(if(a.fbank_name = 'BNI', a.fdebet, 0)) as kartu_debit_bni,
+				sum(if(a.fbank_name = 'TRANSFER BNI', a.fdebet, 0)) as transfer_bni,
+				sum(if(a.fbank_name = 'TRANSFER MANDIRI', a.fdebet, 0)) as transfer_mandiri,
+				sum(a.fkredit) as kartu_kredit,
+				sum(if(a.ftype = 2, (a.fbill_amount + a.fvat), 0)) as kredit,
+				sum(a.fshu) as fshu,
+				sum(a.fkupon) as fkupon,
+				sum(a.fpotga) as kredit_anggota,
+				sum(a.fvoucher) as voucher,
+				coalesce(sum(a.fpembulatan),0) as pembulatan
+			from
+				rst_fc_trans_header a
+			left join `user` c on
+				a.fcodecashier = c.username
+			where
+				(date(a.fdate) between '".$data['tanggal_awal']."' and '".$data['tanggal_akhir']."')
+				and a.fbill_amount is not null
+				and a.flokasi = '".$data['toko_kode']."'
+				and a.fstatuskey = '1' ".$whereKasir."
+			group by
+				a.fcode,
+				a.fdate,
+				a.fcustkey,
+				a.fcodecashier,
+				a.fcustname
+			order by
+				a.fdate,
+				a.fcodecashier,
+				a.fcode
+			";
 		//}
 		
 		$result = $this->db->query($query);
@@ -1065,8 +1108,91 @@ class Laporan_model extends CI_Model{
 	}
 
 	function RekapDetailPenjualanHarian($data){
-		$queryAtas = "SELECT p.flokasi, UPPER(t.nama) as nama_toko, t.alamat ,DATE(p.fdate) as tanggal, p.fshift, SUM(IFNULL(p.fgrand_total,0)) AS fgrand_total , SUM(IFNULL(p.fcash,0)) AS fcash, SUM(IFNULL(p.fcash_change,0)) AS 'Kembalian', SUM(IFNULL(p.fcash-p.fcash_change,0)) AS 'UangTunai', SUM(IFNULL(p.fkupon,0)) AS fkupon, SUM(IFNULL(p.fshu,0)) AS fshu , SUM(IFNULL(p.fdebet + p.fpos_serviceCharge,0))AS fdebet , SUM(IF(p.fbank_name='LINKAJA', p.fdebet + p.fpos_serviceCharge, 0)) AS link_aja, SUM(IF(p.fbank_name='MANDIRI', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_mandiri, SUM(IF(p.fbank_name='BCA', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_bca, SUM(IF(p.fbank_name='BRI', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_bri, SUM(IF(p.fbank_name='BNI', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_bni, SUM(IF(p.fbank_name='BANK DKI', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_dki, SUM(IF(p.fbank_name='AGEN-BNI46', p.fdebet + p.fpos_serviceCharge, 0)) AS agenbni46, SUM(IF(p.fbank_name='TRANSFER', p.fdebet + p.fpos_serviceCharge, 0)) AS transfer, SUM(IF(p.funit='MANDIRI', p.fkredit, 0)) AS kartu_kredit_mandiri, SUM(IF(p.funit='BCA', p.fkredit, 0)) AS kartu_kredit_bca, SUM(IF(p.funit='BRI', p.fkredit, 0)) AS kartu_kredit_bri, SUM(IF(p.funit='BNI', p.fkredit, 0)) AS kartu_kredit_bni, SUM(IFNULL(p.fvoucher,0)) AS fvoucher, SUM(IFNULL(p.fpoint,0)) AS fpoint , SUM(IFNULL(p.fkredit,0)) AS fkredit , SUM(IFNULL(p.fpotga,0)) AS fpotga , SUM(IFNULL(p.ftau,0)) AS ftau , SUM((p.fcash-p.fcash_change)+p.fkupon+p.fshu+p.fdebet + p.fpos_serviceCharge +p.fvoucher+p.fpoint+p.ftau) AS 'komposisi', SUM(IFNULL(u.jumlah,0)) AS 'Piutang', SUM(IF(p.fname_payment='KREDIT BUKU', u.jumlah, 0)) AS kredit_buku, SUM(IF(p.fname_payment='KREDIT INSTANSI', u.jumlah, 0)) AS kredit_perusahaan, SUM(IFNULL(k.jml_kredit,0)) AS 'KreditAngs', SUM(IF(p.fcash> 0 , 1, 0)) AS Countfcash, SUM(IF(p.fkupon> 0 , 1, 0)) AS Countfkupon, SUM(IF(p.fshu> 0 , 1, 0)) AS Countfshu, SUM(IF(p.fdebet> 0 , 1, 0)) AS Countfdebet, SUM(IF(p.fvoucher> 0 , 1, 0)) AS Countfvoucher, SUM(IF(p.fpoint> 0 , 1, 0)) AS Countfpoint, SUM(IF(p.fkredit> 0 , 1, 0)) AS Countfkredit, SUM(IF(p.fpotga> 0 , 1, 0)) AS Countfpotga, SUM(IF(p.ftau> 0 , 1, 0)) AS Countftau, SUM(IF(u.jumlah> 0 , 1, 0)) AS CountfPiutang, SUM(IF(p.fname_payment='KREDIT BUKU' , 1, 0)) AS Countfjml_kreditBuku, SUM(IF(p.fname_payment='KREDIT INSTANSI' , 1, 0)) AS Countfjml_kreditIns, SUM(IF(p.fname_payment='KREDIT ANGS' , 1, 0)) AS Countfjml_kreditAngs, o.jabatan AS JabatanMgr, o.nama AS NamaMgr, d.jabatan AS jabatanKabid, d.nama AS NamaKabid, n.jabatan AS jabatanUnit, n.nama AS NamaUnit FROM rst_fc_trans_header p LEFT JOIN piutang u ON p.fcode=u.ref_penjualan AND u.toko_kode=p.flokasi LEFT JOIN t_kredit_anggota k ON p.fcode=k.ref_bukti_bo AND k.kd_toko=p.flokasi LEFT JOIN ttd_kaunit n ON p.flokasi=n.kd_unit, toko t, `user` a, ttd_mgr_op o, ttd_kabid d WHERE p.flokasi=t.kode AND a.username=p.fcodecashier AND (p.fdate between '".$data['tanggal_awal']."' and '".$data['tanggal_akhir']."') AND p.fstatuskey='1' AND p.flokasi='".$data['toko_kode']."' group by p.fdate";
+		// $queryAtas = "SELECT p.flokasi, UPPER(t.nama) as nama_toko, t.alamat ,DATE(p.fdate) as tanggal, p.fshift, SUM(IFNULL(p.fgrand_total,0)) AS fgrand_total , SUM(IFNULL(p.fcash,0)) AS fcash, SUM(IFNULL(p.fcash_change,0)) AS 'Kembalian', SUM(IFNULL(p.fcash-p.fcash_change,0)) AS 'UangTunai', SUM(IFNULL(p.fkupon,0)) AS fkupon, SUM(IFNULL(p.fshu,0)) AS fshu , SUM(IFNULL(p.fdebet + p.fpos_serviceCharge,0))AS fdebet , SUM(IF(p.fbank_name='LINKAJA', p.fdebet + p.fpos_serviceCharge, 0)) AS link_aja, SUM(IF(p.fbank_name='MANDIRI', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_mandiri, SUM(IF(p.fbank_name='BCA', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_bca, SUM(IF(p.fbank_name='BRI', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_bri, SUM(IF(p.fbank_name='BNI', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_bni, SUM(IF(p.fbank_name='BANK DKI', p.fdebet + p.fpos_serviceCharge, 0)) AS kartu_debit_dki, SUM(IF(p.fbank_name='AGEN-BNI46', p.fdebet + p.fpos_serviceCharge, 0)) AS agenbni46, SUM(IF(p.fbank_name='TRANSFER', p.fdebet + p.fpos_serviceCharge, 0)) AS transfer, SUM(IF(p.funit='MANDIRI', p.fkredit, 0)) AS kartu_kredit_mandiri, SUM(IF(p.funit='BCA', p.fkredit, 0)) AS kartu_kredit_bca, SUM(IF(p.funit='BRI', p.fkredit, 0)) AS kartu_kredit_bri, SUM(IF(p.funit='BNI', p.fkredit, 0)) AS kartu_kredit_bni, SUM(IFNULL(p.fvoucher,0)) AS fvoucher, SUM(IFNULL(p.fpoint,0)) AS fpoint , SUM(IFNULL(p.fkredit,0)) AS fkredit , SUM(IFNULL(p.fpotga,0)) AS fpotga , SUM(IFNULL(p.ftau,0)) AS ftau , SUM((p.fcash-p.fcash_change)+p.fkupon+p.fshu+p.fdebet + p.fpos_serviceCharge +p.fvoucher+p.fpoint+p.ftau) AS 'komposisi', SUM(IFNULL(u.jumlah,0)) AS 'Piutang', SUM(IF(p.fname_payment='KREDIT BUKU', u.jumlah, 0)) AS kredit_buku, SUM(IF(p.fname_payment='KREDIT INSTANSI', u.jumlah, 0)) AS kredit_perusahaan, SUM(IFNULL(k.jml_kredit,0)) AS 'KreditAngs', SUM(IF(p.fcash> 0 , 1, 0)) AS Countfcash, SUM(IF(p.fkupon> 0 , 1, 0)) AS Countfkupon, SUM(IF(p.fshu> 0 , 1, 0)) AS Countfshu, SUM(IF(p.fdebet> 0 , 1, 0)) AS Countfdebet, SUM(IF(p.fvoucher> 0 , 1, 0)) AS Countfvoucher, SUM(IF(p.fpoint> 0 , 1, 0)) AS Countfpoint, SUM(IF(p.fkredit> 0 , 1, 0)) AS Countfkredit, SUM(IF(p.fpotga> 0 , 1, 0)) AS Countfpotga, SUM(IF(p.ftau> 0 , 1, 0)) AS Countftau, SUM(IF(u.jumlah> 0 , 1, 0)) AS CountfPiutang, SUM(IF(p.fname_payment='KREDIT BUKU' , 1, 0)) AS Countfjml_kreditBuku, SUM(IF(p.fname_payment='KREDIT INSTANSI' , 1, 0)) AS Countfjml_kreditIns, SUM(IF(p.fname_payment='KREDIT ANGS' , 1, 0)) AS Countfjml_kreditAngs, o.jabatan AS JabatanMgr, o.nama AS NamaMgr, d.jabatan AS jabatanKabid, d.nama AS NamaKabid, n.jabatan AS jabatanUnit, n.nama AS NamaUnit FROM rst_fc_trans_header p LEFT JOIN piutang u ON p.fcode=u.ref_penjualan AND u.toko_kode=p.flokasi LEFT JOIN t_kredit_anggota k ON p.fcode=k.ref_bukti_bo AND k.kd_toko=p.flokasi LEFT JOIN ttd_kaunit n ON p.flokasi=n.kd_unit, toko t, `user` a, ttd_mgr_op o, ttd_kabid d WHERE p.flokasi=t.kode AND a.username=p.fcodecashier AND (p.fdate between '".$data['tanggal_awal']."' and '".$data['tanggal_akhir']."') AND p.fstatuskey='1' AND p.flokasi='".$data['toko_kode']."' group by p.fdate";
 
+		$queryAtas = "
+		select
+			p.flokasi,
+			upper(t.nama) as nama_toko,
+			t.alamat ,
+			date(p.fdate) as tanggal,
+			p.fshift,
+			sum(IFNULL(p.fgrand_total, 0)) as fgrand_total ,
+			sum(IFNULL(p.fcash, 0)) as fcash,
+			sum(IFNULL(p.fcash_change, 0)) as 'Kembalian',
+			sum(IFNULL(p.fcash-p.fcash_change, 0)) as 'UangTunai',
+			sum(IFNULL(p.fkupon, 0)) as fkupon,
+			sum(IFNULL(p.fshu, 0)) as fshu ,
+			sum(IFNULL(p.fdebet + p.fpos_serviceCharge, 0))as fdebet ,
+			sum(if(p.fbank_name = 'LINKAJA', p.fdebet + p.fpos_serviceCharge, 0)) as link_aja,
+			sum(if(p.fbank_name = 'MANDIRI', p.fdebet + p.fpos_serviceCharge, 0)) as kartu_debit_mandiri,
+			sum(if(p.fbank_name = 'BCA', p.fdebet + p.fpos_serviceCharge, 0)) as kartu_debit_bca,
+			sum(if(p.fbank_name = 'BRI', p.fdebet + p.fpos_serviceCharge, 0)) as kartu_debit_bri,
+			sum(if(p.fbank_name = 'BNI', p.fdebet + p.fpos_serviceCharge, 0)) as kartu_debit_bni,
+			sum(if(p.fbank_name = 'BANK DKI', p.fdebet + p.fpos_serviceCharge, 0)) as kartu_debit_dki,
+			sum(if(p.fbank_name = 'AGEN-BNI46', p.fdebet + p.fpos_serviceCharge, 0)) as agenbni46,
+			sum(if(p.fbank_name = 'TRANSFER', p.fdebet + p.fpos_serviceCharge, 0)) as transfer,
+			sum(if(p.fbank_name = 'TRANSFER BNI', p.fdebet + p.fpos_serviceCharge, 0)) as transfer_bni,
+			sum(if(p.fbank_name = 'TRANSFER MANDIRI', p.fdebet + p.fpos_serviceCharge, 0)) as transfer_mandiri,
+			sum(if(p.funit = 'MANDIRI', p.fkredit, 0)) as kartu_kredit_mandiri,
+			sum(if(p.funit = 'BCA', p.fkredit, 0)) as kartu_kredit_bca,
+			sum(if(p.funit = 'BRI', p.fkredit, 0)) as kartu_kredit_bri,
+			sum(if(p.funit = 'BNI', p.fkredit, 0)) as kartu_kredit_bni,
+			sum(IFNULL(p.fvoucher, 0)) as fvoucher,
+			sum(IFNULL(p.fpoint, 0)) as fpoint ,
+			sum(IFNULL(p.fkredit, 0)) as fkredit ,
+			sum(IFNULL(p.fpotga, 0)) as fpotga ,
+			sum(IFNULL(p.ftau, 0)) as ftau ,
+			sum((p.fcash-p.fcash_change)+ p.fkupon + p.fshu + p.fdebet + p.fpos_serviceCharge + p.fvoucher + p.fpoint + p.ftau) as 'komposisi',
+			sum(IFNULL(u.jumlah, 0)) as 'Piutang',
+			sum(if(p.fname_payment = 'KREDIT BUKU', u.jumlah, 0)) as kredit_buku,
+			sum(if(p.fname_payment = 'KREDIT INSTANSI', u.jumlah, 0)) as kredit_perusahaan,
+			sum(IFNULL(k.jml_kredit, 0)) as 'KreditAngs',
+			sum(if(p.fcash> 0 , 1, 0)) as Countfcash,
+			sum(if(p.fkupon> 0 , 1, 0)) as Countfkupon,
+			sum(if(p.fshu> 0 , 1, 0)) as Countfshu,
+			sum(if(p.fdebet> 0 , 1, 0)) as Countfdebet,
+			sum(if(p.fvoucher> 0 , 1, 0)) as Countfvoucher,
+			sum(if(p.fpoint> 0 , 1, 0)) as Countfpoint,
+			sum(if(p.fkredit> 0 , 1, 0)) as Countfkredit,
+			sum(if(p.fpotga> 0 , 1, 0)) as Countfpotga,
+			sum(if(p.ftau> 0 , 1, 0)) as Countftau,
+			sum(if(u.jumlah> 0 , 1, 0)) as CountfPiutang,
+			sum(if(p.fname_payment = 'KREDIT BUKU' , 1, 0)) as Countfjml_kreditBuku,
+			sum(if(p.fname_payment = 'KREDIT INSTANSI' , 1, 0)) as Countfjml_kreditIns,
+			sum(if(p.fname_payment = 'KREDIT ANGS' , 1, 0)) as Countfjml_kreditAngs,
+			o.jabatan as JabatanMgr,
+			o.nama as NamaMgr,
+			d.jabatan as jabatanKabid,
+			d.nama as NamaKabid,
+			n.jabatan as jabatanUnit,
+			n.nama as NamaUnit,
+			concat(p.fcodecashier, ' - ', ks.nama) as kasir
+		from
+			rst_fc_trans_header p
+		left join piutang u on
+			p.fcode = u.ref_penjualan
+			and u.toko_kode = p.flokasi
+		left join t_kredit_anggota k on
+			p.fcode = k.ref_bukti_bo
+			and k.kd_toko = p.flokasi
+		left join `user` ks on ks.username = p.fcodecashier
+		left join ttd_kaunit n on
+			p.flokasi = n.kd_unit,
+			toko t,
+			`user` a,
+			ttd_mgr_op o,
+			ttd_kabid d
+		where
+			p.flokasi = t.kode
+			and a.username = p.fcodecashier
+			and (p.fdate between '".$data['tanggal_awal']."' and '".$data['tanggal_akhir']."')
+			and p.fstatuskey = '1'
+			and p.flokasi = '".$data['toko_kode']."' ";
+		if ($data['kasir_kode'] != ''){
+			$queryAtas.="and p.fcodecashier = '".$data['kasir_kode']."' ";
+		}
+		$queryAtas.="group by p.fdate ";
 		$result = $this->db->query($queryAtas);
 		$resultTable = $result->result_array();
 		

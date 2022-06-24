@@ -14,6 +14,11 @@
 							<option value="-1">Pilih Toko</option>
 						</select>
 					</td>
+					<td style="width: 200px;">
+						<select class="form-control" style="width: 190px;" name="cari_kasir_kode" id="cari_kasir_kode">
+							<option value="-1">Pilih Kasir</option>
+						</select>
+					</td>
 					<td>
 						<input type="text" style="width: 100px;" value="<?= date('Y-m-d'); ?>" name="mutasi_tanggal_awal" id="mutasi_tanggal_awal" class="form-control">
 					</td>
@@ -56,6 +61,7 @@
 	$(document).ready(function(){
 		OpenMenu();
 		loadListToko();
+		loadListKasir();
 		
 		$('#mutasi_tanggal_awal').datepicker({
 			format: 'yyyy-mm-dd'
@@ -78,17 +84,30 @@
 			}
 		});
 	}
+
+	function loadListKasir(){
+		$.ajax({
+			type: "POST",
+			url: "<?= base_url() ?>index.php/user/getlistkasir",
+			data: "",
+			success: function(msg){
+				$("#cari_kasir_kode").html(msg);
+				$("#cari_kasir_kode").select2();
+			}
+		});
+	}
 	
 	function LoadDataMutasi(){
 		var tanggal_awal = $("#mutasi_tanggal_awal").val();
 		var tanggal_akhir = $("#mutasi_tanggal_akhir").val();
 		var toko_kode = $("#cari_toko_kode").val();
-
+		var kasir_kode = $("#cari_kasir_kode").select2("val");
+		
 		$("#progres-main").show();
 		$.ajax({
 			type: "POST",
 			url: "<?= base_url('index.php/laporan/detailpenjualanharian/gettransaksipenjualan') ?>",
-			data: "tanggal_awal="+tanggal_awal+"&tanggal_akhir="+tanggal_akhir+"&toko_kode="+toko_kode,
+			data: "tanggal_awal="+tanggal_awal+"&tanggal_akhir="+tanggal_akhir+"&toko_kode="+toko_kode+"&kasir_kode="+kasir_kode,
 			success: function(msg){
 				$("#lap_penjualan").html(msg);
 				
@@ -108,7 +127,8 @@
 
 	function CetakDetailPenjualan(tanggal){
 		var toko_kode = $("#cari_toko_kode").val();
+		var kasir_kode = $("#cari_kasir_kode").select2("val");
 
-		window.open('<?= base_url('index.php/laporan/detailpenjualanharian/cetakdetailpenjualan?') ?>tanggal_awal='+tanggal+'&tanggal_akhir='+tanggal+"&toko_kode="+toko_kode,'_blank');
+		window.open('<?= base_url('index.php/laporan/detailpenjualanharian/cetakdetailpenjualan?') ?>tanggal_awal='+tanggal+'&tanggal_akhir='+tanggal+"&toko_kode="+toko_kode+"&kasir_kode="+kasir_kode,'_blank');
 	}
 </script>

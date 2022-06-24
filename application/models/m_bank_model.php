@@ -17,7 +17,7 @@ class M_bank_model extends CI_Model{
 		 * `kd_bank` varchar(4) NOT NULL,
   		   `keterangan` varchar(45) DEFAULT NULL
 		 */
-		$query = "insert into bank (id, nama_bank) values('".$data['kd_bank']."','".$data['keterangan']."')";
+		$query = "insert into bank (id, nama_bank, status) values('".$data['kd_bank']."','".$data['keterangan']."', '0')";
 		
 		$this->db->query($query);
 	}
